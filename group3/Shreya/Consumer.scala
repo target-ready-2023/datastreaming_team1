@@ -8,7 +8,7 @@ object Consumer{
   def main(args:Array[String]): Unit = {
 
     val TOPIC = "datastreaming"
-    val fileName = "C:\\Users\\Shreya\\Target_Ready\\data streaming project\\datastreaming\\DataSetFromKafka1.csv"
+    val fileName = "C:\\Users\\Shreya\\Target_Ready\\data streaming project\\datastreaming\\DataSetFromKafka.csv"
 
     val props = new Properties()
     props.put("bootstrap.servers", "localhost:9092")
