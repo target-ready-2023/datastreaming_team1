@@ -1,6 +1,5 @@
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import org.apache.spark.sql.SparkSession
-
 import java.util.Properties
 
 object Producer{
@@ -25,10 +24,10 @@ object Producer{
 
     val topicName = "datastreaming"
 
-    df.foreachPartition { partition =>
+    dfWithHeader.foreachPartition { partition =>
       val producer: KafkaProducer[String, String] = new KafkaProducer[String, String](props)
       partition.foreach{ row=>
-        val record: ProducerRecord[String, String] = new ProducerRecord[String, String](topicName, "key", row.mkString(","))
+        val record: ProducerRecord[String, String] = new ProducerRecord[String, String](topicName, row.mkString(","))
         producer.send(record)
         //println(record)
       }
