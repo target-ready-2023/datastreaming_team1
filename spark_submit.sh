@@ -1,1 +1,1 @@
-spark-submit --class ScalaSparkReadCSV build/libs/datastreaming_team1-0.0.1.jar
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.5,org.apache.kafka:kafka_2.11:2.4.1,org.apache.kafka:kafka-clients:2.4.1 --class producerCSV build/libs/datastreaming_team1-0.0.1.jar

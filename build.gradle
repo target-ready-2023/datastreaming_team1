@@ -1,27 +1,11 @@
-buildscript {
-    repositories {
-    }
-    dependencies {
-        classpath 'com.github.johnrengelman:shadow:8.1.1'
-    }
-}
-plugins {
-    id 'java'
-}
-
-
 apply plugin: 'scala'
-
-
 
 sourceSets {
     main {
         scala {
             srcDir 'src/main/scala'
         }
-
     }
-
 }
 
 repositories {
@@ -31,15 +15,10 @@ dependencies {
     compile "org.scala-lang:scala-library:2.11.12"
     compile "org.scala-lang:scala-reflect:2.11.12"
     compile "org.scala-lang:scala-compiler:2.11.12"
-
-    compile 'org.apache.spark:spark-mllib_2.11:2.1.0'
-    compile 'org.apache.spark:spark-sql_2.11:2.1.0'
-    compile 'org.apache.spark:spark-streaming-flume-assembly_2.11:2.1.0'
-    compile 'org.apache.spark:spark-graphx_2.11:2.1.0'
-    compile 'org.apache.spark:spark-launcher_2.11:2.1.0'
-    compile 'org.apache.spark:spark-catalyst_2.11:2.1.0'
-    compile 'org.apache.spark:spark-streaming_2.11:2.1.0'
-    compile 'org.apache.spark:spark-core_2.11:2.1.0'
+    compile 'org.apache.spark:spark-sql_2.11:2.3.1'
+    compile 'org.apache.spark:spark-core_2.11:2.3.1'
+    compile 'org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.5'
+    compile 'org.apache.kafka:kafka_2.11:2.4.1'
+    compile 'org.apache.kafka:kafka-clients:2.4.1'
 }
-
 
