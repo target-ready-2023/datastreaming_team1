@@ -15,8 +15,6 @@ object bussinessLogics {
 
     /** DUMP ERROR SELLING CHANNELS INTO DATABASE*/
     val error_df_selling_channel = df.filter((df("selling_channel")=!="Cross Over" && df("selling_channel")=!="Store Only"  && df("selling_channel")=!="Online Only"))
-//    println("***********************************************Error DF Selling Channel*************************************************")
-//    error_df_selling_channel.show()
     //dump error_df_selling_channel into mysql
 
     error_df_selling_channel.write
@@ -33,13 +31,10 @@ object bussinessLogics {
     /** REMOVE INVALID CHANNELS FROM THE DATAFRAME*/
     println("Valid channels DF")
     val valid_channel_df = df.filter((df("selling_channel")==="Cross Over" || df("selling_channel")==="Store Only"  || df("selling_channel")==="Online Only"))
-//    valid_channel_df.show()
 
     /** DUMP NULL OR 0 RECORDS OF retail_price COLUMN INTO DATABASE*/
     val error_df_price = valid_channel_df.filter(valid_channel_df("retail_price")===0 || valid_channel_df("retail_price").isNull)
-//    println("***********************************************Error DF Retail Price*************************************************")
-//    error_df_price.show()
-//    println(error_df_price.count())
+
     //dump error_df_price into error_table (mysql)
 
     error_df_price.write
@@ -54,19 +49,10 @@ object bussinessLogics {
 
     /** REMOVING Nulls/0 FROM retail_price COLUMN */
     val removed_null_price_df = valid_channel_df.filter(valid_channel_df("retail_price")=!=0 && valid_channel_df("retail_price").isNotNull)
-//    removed_null_price_df.show()
-    /** testing */
-    /* val test=(removed_null_price_df.filter(removed_null_price_df("retail_price")===0 || removed_null_price_df("retail_price").isNull))
-    println("***********************************************Testing if any null/0 records are still there *************************************************")
-    test.show()
-    */
-
 
     /** Product id should be only numeric and 8 digit*/
 
-    println("***********************************************Errod Product ID***********************************************")
     val only_numeric_df = removed_null_price_df.filter(removed_null_price_df.col("product_id").cast("int").isNotNull)
-    only_numeric_df.show()
 
     only_numeric_df.createOrReplaceTempView("TAB")
     spark.sql("select * " +
@@ -74,5 +60,3 @@ object bussinessLogics {
     spark.stop()
   }
 }
-
-//85568882
