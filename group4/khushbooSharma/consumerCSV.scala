@@ -51,18 +51,17 @@ object consumerCSV {
     val kafkaDF = spark.readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "localhost:9092")
-      .option("subscribe", "datastream") // The same topic name used in the producer code
+      .option("subscribe", "datastream")
       .load()
 
-    // Convert key and value columns from Kafka into string
     val kafkaData = kafkaDF
       .selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
 
-    // Print the consumed messages
     val query = kafkaData
       .writeStream
-      .outputMode("append")
-      .format("console")
+      .format("csv")
+      .option("path","D:/TargetCoorporationPhaseSecond/data_from_kafka/kafka_consumed_csv.csv")
+      .option("checkpointLocation", "D:/TargetCoorporationPhaseSecond/data_from_kafka/kafka_checkpoints")
       .start()
 
     query.awaitTermination()
