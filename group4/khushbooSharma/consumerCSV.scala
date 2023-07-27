@@ -52,6 +52,7 @@ object consumerCSV {
       .format("kafka")
       .option("kafka.bootstrap.servers", "localhost:9092")
       .option("subscribe", "datastream")
+      .option("maxOffsetsPerTrigger", "1100100")
       .load()
 
     val kafkaData = kafkaDF
@@ -59,13 +60,28 @@ object consumerCSV {
 
     val query = kafkaData
       .writeStream
-      .format("csv")
-      .option("path","D:/TargetCoorporationPhaseSecond/data_from_kafka/kafka_consumed_csv.csv")
+      .format("json")
+      .option("path","D:/TargetCoorporationPhaseSecond/data_from_kafka/kafka_consumed_JSON")
       .option("checkpointLocation", "D:/TargetCoorporationPhaseSecond/data_from_kafka/kafka_checkpoints")
       .start()
 
-    query.awaitTermination()
+    val q2=kafkaData.writeStream
+      .format("console")
+      .start()
 
+
+    query.awaitTermination()
+    q2.awaitTermination()
     spark.stop()
   }
 }
+
+/*
+val jsonQuery = kafkaData
+      .writeStream
+      .foreach(new ForeachWriter[Row] {
+        // Your custom foreach writer code
+      })
+      .outputMode("append") // Change the outputMode as per your requirement
+      .start()
+* */
