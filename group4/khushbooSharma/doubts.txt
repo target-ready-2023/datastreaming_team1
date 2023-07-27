@@ -1,1 +1,1 @@
-the issue is fixed for incompatible versions of kafka and sparkstreaming but this reads only 5 records in each 4 different partitions.
+the issue is fixed for incompatible versions of kafka and sparkstreaming but the updated code reads only 5 records in each 4 different partitions.
