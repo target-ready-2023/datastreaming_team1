@@ -15,7 +15,7 @@ object consumerCSV {
     import spark.implicits._
     import spark.sql
 
-
+/*
     val props = new Properties()
 
     props.put("bootstrap.servers", "localhost:9092")
@@ -29,8 +29,8 @@ object consumerCSV {
     import java.io.BufferedWriter
     import java.io.FileWriter
 //    val buffWriter = new BufferedWriter(new FileWriter("D:/TargetCoorporationPhaseSecond/data_from_kafka/temp.txt"))
-//    val buffWriter = new BufferedWriter(new FileWriter("D:/TargetCoorporationPhaseSecond/data_from_kafka/output.json"))
-    val buffWriter = new BufferedWriter(new FileWriter("D:/TargetCoorporationPhaseSecond/data_from_kafka/output_csv.csv"))
+    val buffWriter = new BufferedWriter(new FileWriter("D:/TargetCoorporationPhaseSecond/data_from_kafka/output.json"))
+//    val buffWriter = new BufferedWriter(new FileWriter("D:/TargetCoorporationPhaseSecond/data_from_kafka/output_csv.csv"))
 
     val running=true
 
@@ -40,17 +40,32 @@ object consumerCSV {
 
       for(record<-records.asScala){
         println(record.value())
-
-
-//        import shapeless.record
-        buffWriter.write(record.value())
-
+        buffWriter.write(record.value() + System.lineSeparator())
+        buffWriter.flush()
       }
 
-//      val rdd= spark.sparkContext.parallelize(Seq(records))
-//      val columns = Seq("language","users_count")
-//      val df=spark.createDataFrame(rdd).toDF(columns:_*)
     }
+
+*/
+
+    val kafkaDF = spark.readStream
+      .format("kafka")
+      .option("kafka.bootstrap.servers", "localhost:9092")
+      .option("subscribe", "datastream") // The same topic name used in the producer code
+      .load()
+
+    // Convert key and value columns from Kafka into string
+    val kafkaData = kafkaDF
+      .selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+
+    // Print the consumed messages
+    val query = kafkaData
+      .writeStream
+      .outputMode("append")
+      .format("console")
+      .start()
+
+    query.awaitTermination()
 
     spark.stop()
   }
