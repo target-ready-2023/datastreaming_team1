@@ -15,6 +15,10 @@ object consumerCSV {
     import spark.implicits._
     import spark.sql
 
+    /** TO Desable the SUCCESS & CRC files*/
+
+    spark.conf.set("mapreduce.fileoutputcommitter.marksuccessfuljobs", "false")
+
 /*
     val props = new Properties()
 
@@ -48,11 +52,14 @@ object consumerCSV {
 
 */
 
+
     val kafkaDF = spark.readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "localhost:9092")
       .option("subscribe", "datastream")
+      .option("includeHeaders", "true")
       .option("maxOffsetsPerTrigger", "1100100")
+      .option("failOnDataLoss", "false")
       .load()
 
     val kafkaData = kafkaDF
@@ -61,8 +68,8 @@ object consumerCSV {
     val query = kafkaData
       .writeStream
       .format("json")
-      .option("path","D:/TargetCoorporationPhaseSecond/data_from_kafka/kafka_consumed_JSON")
-      .option("checkpointLocation", "D:/TargetCoorporationPhaseSecond/data_from_kafka/kafka_checkpoints")
+      .option("path","D:/TargetCoorporationPhaseSecond/data_from_kafka/final/kafka_consumed_json_FINAL")
+      .option("checkpointLocation", "D:/TargetCoorporationPhaseSecond/data_from_kafka/final/kafka_checkpoints/latestJ1")
       .start()
 
     val q2=kafkaData.writeStream
@@ -75,13 +82,3 @@ object consumerCSV {
     spark.stop()
   }
 }
-
-/*
-val jsonQuery = kafkaData
-      .writeStream
-      .foreach(new ForeachWriter[Row] {
-        // Your custom foreach writer code
-      })
-      .outputMode("append") // Change the outputMode as per your requirement
-      .start()
-* */
