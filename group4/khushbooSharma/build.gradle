@@ -22,5 +22,8 @@ dependencies {
     compile 'org.apache.kafka:kafka-clients:2.4.1'
 
     implementation("mysql:mysql-connector-java:8.0.30")
+    // https://mvnrepository.com/artifact/org.scalatest/scalatest-flatspec
+    testImplementation("org.scalatest:scalatest-flatspec_2.11:3.2.15")
+
 }
 
