@@ -1,1 +1,7 @@
-the issue is fixed for incompatible versions of kafka and sparkstreaming but the updated code reads only 5 records in each 4 different partitions.
+AS IN THE LAST WEDNESDAY Seetharam SUGGESTED TO ADD A NEW COLUMNN NAMED UPDATE_DATE 
+AND INITIALLY IT WILL BE FILLED WITH SAME AS DATE COLUMN BUT AFTERWARDS HOW SHOULD WE MODIFY 
+THAT OR UPDATE IT BCS IN THE USE CASE DOC WHAT U HV SHARED WITH US THERE IS AN OPTIONAL TASK MENTIONED ::
+
+>> Update the non-primary key fields in source data.
+
+SO HOW SHOULD WE ACHIEVE THIS, PLEASE GUIDE.
