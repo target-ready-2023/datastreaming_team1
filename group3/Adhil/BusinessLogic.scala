@@ -9,12 +9,9 @@ object BusinessLogic {
 
     val spark = SparkSession.builder()
       .appName("Read ConsumerDF")
-      .master("local[*]")  // Replace with your cluster URL if running on a cluster
+      .master("local[*]")  
       .getOrCreate()
-/*
 
-
- */
     val df = spark.read.format("com.databricks.spark.csv")
            .option("delimiter", ",")
            .load("D:\\target2\\targetReadyDataSet\\fromConsumer\\ReadData")
