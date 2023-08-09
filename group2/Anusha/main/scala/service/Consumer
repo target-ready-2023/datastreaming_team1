@@ -1,0 +1,34 @@
+package service
+
+import org.apache.spark.sql.functions.{col, from_json}
+import org.apache.spark.sql.types.{StringType, StructType}
+import org.apache.spark.sql.{DataFrame, SparkSession}
+
+object Consumer {
+
+  def consumer(topicName: String, bootstrapServer: String, format : String)(implicit sparkSession: SparkSession): DataFrame = {
+
+    val kafkaDF =   sparkSession.read.format(format)
+      .option("kafka.bootstrap.servers", bootstrapServer)
+      .option("subscribe", topicName)
+      .option("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
+      .load()
+
+    val decodedData = kafkaDF.selectExpr("CAST (value AS STRING)")
+
+    val schema = new StructType()
+      .add("product_id",StringType)
+      .add("location_id",StringType)
+      .add("selling_channel",StringType)
+      .add("prod_description",StringType)
+      .add("retail_price",StringType)
+      .add("onhand_quantity",StringType)
+      .add("create_date",StringType)
+      .add("promotion_eligibility",StringType)
+
+    val outputDF = decodedData.select(from_json(col("value"),schema).alias("data")).select("data.*")
+    print(outputDF.count())
+    outputDF
+
+  }
+}
