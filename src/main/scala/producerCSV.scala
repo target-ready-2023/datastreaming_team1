@@ -12,9 +12,9 @@ object producerCSV {
       .load("/Users/z083276/Downloads/targetReadyDataSet.csv")
 
     val colum_names = Seq("product_id", "location_id", "selling_channel", "prod_description", "retail_price", "onhand_quantity", "create_date", "promotion_eligibility")
-    val dfWithHeader = df.toDF(colum_names: _*).limit(5)
+    val dfWithHeader = df.toDF(colum_names: _*)
 
-    dfWithHeader.select((struct("product_id").cast("string")).alias("key"), to_json(struct("*")).alias("value")).write.format("kafka").
+    dfWithHeader.limit(5).select((struct("product_id").cast("string")).alias("key"), to_json(struct("*")).alias("value")).write.format("kafka").
       option("kafka.bootstrap.servers", "localhost:9092").
       option("topic", "datastream").save()
   }
