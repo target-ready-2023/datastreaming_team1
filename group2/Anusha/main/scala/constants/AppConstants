@@ -1,0 +1,29 @@
+package constants
+
+object AppConstants {
+  val APP_NAME = "spark.app.name"
+  val APP_MASTER = "spark.app.master"
+
+  //input path
+  val FILE_INPUT_PATH: String = "spark.app.fileInputPath"
+
+  val TOPIC_NAME = "datastream"
+  val KAFKA_BOOTSTRAP_SERVER = "localhost:9092"
+  val COLUMN_NAMES = Seq("product_id",
+    "location_id",
+    "selling_channel",
+    "prod_description",
+    "retail_price",
+    "onhand_quantity",
+    "create_date",
+    "promotion_eligibility")
+
+  //required database values
+  val DB_SOURCE = "jdbc"
+  val JDBC_DRIVER = "com.mysql.cj.jdbc.Driver"
+  val DB_USER = "root"
+  val DB_PASSWORD = "root@123"
+
+  val ERROR_TABLE = "error_table"
+
+}
