@@ -13,7 +13,12 @@ object KafkaConsumer {
       .getOrCreate()
 
     val TOPIC = "datastreaming"
-    val filename="C:\\Users\\Dell\\IdeaProjects\\datastreaming_team1\\ConsumerData.csv"
+    val filename = "C:\\Users\\Dell\\IdeaProjects\\datastreaming_team1\\ConsumerData.csv"
+
+    consume(filename,TOPIC)
+  }
+
+  def consume(filename: String, TOPIC: String): Unit = {
 
     val props = new java.util.Properties()
     props.put("bootstrap.servers", "localhost:9092")
