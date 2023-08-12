@@ -1,9 +1,10 @@
 package service
 
 import constants.AppConstants.{DB_PASSWORD, DB_SOURCE, DB_USER, JDBC_DRIVER}
+import exceptions.Exceptions.DatabaseException
 import org.apache.spark.sql.DataFrame
 
-object DatabaseConnection {
+object DatabaseConnectionService {
   def FileWriter(df: DataFrame, tableName: String, mode: String): Unit = {
     try {
       df.write.format(DB_SOURCE)
@@ -15,8 +16,7 @@ object DatabaseConnection {
         .mode(mode)
         .save()
     } catch {
-      case e: Exception => e.printStackTrace()
+      case _: Exception => throw DatabaseException("Database connection is not established")
     }
   }
-
 }
