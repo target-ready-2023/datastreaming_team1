@@ -15,34 +15,29 @@ repositories {
     mavenCentral()
 }
 dependencies {
-/*    compile group: 'com.typesafe', name: 'config', version: '1.0.2'
-    compile "org.scala-lang:scala-library:2.11.12"
-    compile "org.scala-lang:scala-reflect:2.11.12"
-    compile "org.scala-lang:scala-compiler:2.11.12"
-    compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.2.0'
-    compile group: 'org.apache.spark', name: 'spark-sql_2.11', version: '2.2.0'
-    compile group: 'org.apache.hadoop', name: 'hadoop-hdfs', version: '2.7.3'
-    compile group: 'org.apache.spark', name: 'spark-sql_2.10', version: '1.1.0'*/
 
     compile "org.scala-lang:scala-library:2.11.12"
     compile "org.scala-lang:scala-reflect:2.11.12"
     compile "org.scala-lang:scala-compiler:2.11.12"
+    compile 'org.apache.spark:spark-sql_2.11:2.3.1'
+    compile 'org.apache.spark:spark-core_2.11:2.3.1'
+    compile 'org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.0'
+    compile 'org.apache.kafka:kafka_2.11:2.4.1'
+    compile 'org.apache.kafka:kafka-clients:2.4.1'
+    implementation("mysql:mysql-connector-java:8.0.30")
+    testImplementation("org.scalatest:scalatest-flatspec_2.11:3.2.15")
+    implementation 'com.typesafe:config:1.4.1'
 
-    compile 'org.apache.spark:spark-mllib_2.11:2.1.0'
-    compile 'org.apache.spark:spark-sql_2.11:2.1.0'
-    compile 'org.apache.spark:spark-streaming-flume-assembly_2.11:2.1.0'
-    compile 'org.apache.spark:spark-graphx_2.11:2.1.0'
-    compile 'org.apache.spark:spark-launcher_2.11:2.1.0'
-    compile 'org.apache.spark:spark-catalyst_2.11:2.1.0'
-    compile 'org.apache.spark:spark-streaming_2.11:2.1.0'
-    compile 'org.apache.spark:spark-core_2.11:2.1.0'
+    //.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+    //.\bin\windows\kafka-server-start.bat .\config\server.properties
 
-    implementation 'org.apache.kafka:kafka-clients:2.8.1'
-//    implementation group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.1.2'
-//    implementation group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.1.2'
-//    implementation group: 'org.apache.spark', name: 'spark-sql-kafka-0-10_2.12', version: '3.1.2'
+    //listing a topic in kafka
+    //.\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
 
+    //reading data in a kafka topic
+    //.\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic datastream --from-beginning
 
+    //.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --delete --topic datastream
 
 }
 
