@@ -1,6 +1,7 @@
 import org.apache.spark.sql.SparkSession
 import org.scalatest.flatspec.AnyFlatSpec
-import service.BusinessLogicService.{sellingChannelValidator, productIdValidator, retailPriceValidator, deduplicate}
+import constants.AppConstants.{PRIMARY_KEY_COLS, VALID_SELLING_CHANNEL}
+import service.BusinessLogicService.{deduplicate, productIdValidator, retailPriceValidator, sellingChannelValidator}
 
 class BusinessLogicServiceTest extends AnyFlatSpec {
   val spark: SparkSession = helper.Helper.createSparkSession()
@@ -37,7 +38,7 @@ class BusinessLogicServiceTest extends AnyFlatSpec {
       "create_date",
       "promotion_eligibility")
 
-    val outputDF = sellingChannelValidator(inputDF, "error_table_test")
+    val outputDF = sellingChannelValidator(inputDF, "error_table_test", VALID_SELLING_CHANNEL)
     val result = expectedDF.except(outputDF)
     val ans = result.count()
     val count = 0;
@@ -150,7 +151,7 @@ class BusinessLogicServiceTest extends AnyFlatSpec {
       "create_date",
       "promotion_eligibility")
 
-    val outputDF = deduplicate(inputDF)
+    val outputDF = deduplicate(inputDF, PRIMARY_KEY_COLS)
     val result = expectedDF.except(outputDF)
     val ans = result.count()
     val count = 0;
