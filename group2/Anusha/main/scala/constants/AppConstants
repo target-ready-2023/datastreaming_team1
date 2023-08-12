@@ -1,5 +1,7 @@
 package constants
 
+import org.apache.spark.sql.types.{StringType, StructType}
+
 object AppConstants {
   val APP_NAME = "spark.app.name"
   val APP_MASTER = "spark.app.master"
@@ -7,8 +9,14 @@ object AppConstants {
   //input path
   val FILE_INPUT_PATH: String = "spark.app.fileInputPath"
 
+  //input file format
+  val FILE_FORMAT = "kafka"
+
   val TOPIC_NAME = "datastream"
   val KAFKA_BOOTSTRAP_SERVER = "localhost:9092"
+
+  val PRIMARY_KEY_COLS = Seq("product_id", "location_id")
+
   val COLUMN_NAMES = Seq("product_id",
     "location_id",
     "selling_channel",
@@ -18,6 +26,18 @@ object AppConstants {
     "create_date",
     "promotion_eligibility")
 
+  val VALID_SELLING_CHANNEL = Seq("Online Only", "Store Only", "Cross Over")
+
+  val TABLE_SCHEMA = new StructType()
+    .add("product_id",StringType)
+    .add("location_id",StringType)
+    .add("selling_channel",StringType)
+    .add("prod_description",StringType)
+    .add("retail_price",StringType)
+    .add("onhand_quantity",StringType)
+    .add("create_date",StringType)
+    .add("promotion_eligibility",StringType)
+
   //required database values
   val DB_SOURCE = "jdbc"
   val JDBC_DRIVER = "com.mysql.cj.jdbc.Driver"
@@ -25,5 +45,8 @@ object AppConstants {
   val DB_PASSWORD = "root@123"
 
   val ERROR_TABLE = "error_table"
+  val CROSS_OVER_TABLE_NAME = "cross_over_selling_channel_table"
+  val ONLINE_ONLY_TABLE_NAME = "online_only_selling_channel_table"
+  val STORE_ONLY_TABLE_NAME = "store_only_selling_channel_table"
 
 }
