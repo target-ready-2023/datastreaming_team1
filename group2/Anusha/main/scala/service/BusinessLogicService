@@ -3,6 +3,7 @@ package service
 import org.apache.spark.sql.functions.{col, lit, when}
 import org.apache.spark.sql.{DataFrame, functions}
 import service.DatabaseConnectionService.FileWriter
+import utils.AppUtils.check
 
 object BusinessLogicService {
 
@@ -35,14 +36,16 @@ object BusinessLogicService {
   }
 
   //removing duplicates from the dataframe
-  def deduplicate(inputDF: DataFrame): DataFrame = {
-    val deduplicateDF = inputDF.dropDuplicates("product_id", "location_id")
+  def deduplicate(inputDF: DataFrame, primaryKeyCols : Seq[String]): DataFrame = {
+    check(inputDF, primaryKeyCols)
+    val deduplicateDF = inputDF.dropDuplicates(primaryKeyCols)
     deduplicateDF
   }
-  
+
   //converting the integer values into boolean values
   //1 corresponds to true and 0 corresponds to false
   def integerToBoolean(inputDF: DataFrame, colName: String): DataFrame = {
+    check(inputDF, Seq(colName))
     val convertedDF = inputDF.withColumn(colName, when(col(colName) === 1, true).otherwise(false))
     convertedDF
   }
