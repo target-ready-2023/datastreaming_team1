@@ -1,0 +1,38 @@
+package service
+
+import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.functions.{col, length, trim}
+import Constants.Constants._
+
+object ErrorDetection {
+
+  def sellingChannelCheck(df: DataFrame): Array[DataFrame] = {
+
+    val error_df = df.filter(!col("selling_channel").isin(ALLOWED_SELLING_CHANNELS: _*))
+    val filtered_df = df.filter(col("selling_channel").isin(ALLOWED_SELLING_CHANNELS: _*))
+
+    val processedDataFrames: Array[DataFrame] = Array(error_df, filtered_df)
+    processedDataFrames
+  }
+
+
+  def retailPriceCheck(df: DataFrame): Array[DataFrame] = {
+    val error_price_df = df.filter(col("retail_price") === 0 || col("retail_price").isNull)
+    val price_filtered_df = df.except(error_price_df)
+
+    val processedDataFrames: Array[DataFrame] = Array(error_price_df, price_filtered_df)
+    processedDataFrames
+  }
+
+  def ProductIDCheck(df: DataFrame): Array[DataFrame] = {
+
+    val product_id_filtered_df = df.filter(
+      col("product_id").cast("bigint").isNotNull &&
+        length(trim(col("product_id").cast("string"))) === 8)
+    val product_id_error_df = df.except(product_id_filtered_df)
+
+    val processedDataFrames: Array[DataFrame] = Array(product_id_error_df, product_id_filtered_df)
+    processedDataFrames
+  }
+
+}
