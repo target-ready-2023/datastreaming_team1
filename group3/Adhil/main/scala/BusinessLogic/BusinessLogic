@@ -1,0 +1,47 @@
+package BusinessLogic
+
+
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import Services.DBconnector.dBWriter
+import Services.ErrorDetection.{sellingChannelCheck,retailPriceCheck,ProductIDCheck}
+import Constants.Constants._
+object BusinessLogic {
+
+  def main(args: Array[String]): Unit = {
+
+    val spark = SparkSession.builder()
+      .appName("ConsumerDF_reader")
+      .master("local[*]")  // Replace with your cluster URL if running on a cluster
+      .getOrCreate()
+
+    val df = spark.read.format(DF_FORMAT)
+      .option("delimiter", ",")
+      .load(CONSUMED_DATASET_PATH)
+
+
+    val df1 = df.toDF(ColumnNames: _*)
+
+    val processedDataFrames = sellingChannelCheck(df1)
+    dBWriter(processedDataFrames(0),"error_table")
+
+    val processedDataFrames2 = retailPriceCheck(processedDataFrames(1))
+    dBWriter(processedDataFrames2(0),"error_table")
+
+    val processedDataFrames3 = ProductIDCheck(processedDataFrames2(1))
+    dBWriter(processedDataFrames3(0),"error_table")
+
+    val df_wo_duplicates = processedDataFrames3(1).dropDuplicates(Seq("product_id", "location_id"))
+
+    val online_sold_df = df_wo_duplicates.filter(col("selling_channel")==="Online Only")
+    dBWriter(online_sold_df,"online_table")
+
+    val store_sold_df = df_wo_duplicates.filter(col("selling_channel")==="Store Only")
+    dBWriter(store_sold_df,"store_table")
+
+    val crossover_sold_df = df_wo_duplicates.filter(col("selling_channel")==="Cross Over")
+    dBWriter(crossover_sold_df,"crossover_table")
+
+    spark.stop()
+  }
+}
