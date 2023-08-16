@@ -1,0 +1,21 @@
+package service
+import org.apache.spark.sql.DataFrame
+import Constants.Constants._
+
+object DBconnector {
+
+  def dBWriter(df: DataFrame, tableName: String): Unit = {
+
+    df.write
+      .format("jdbc")
+      .option("driver", MYSQL_DRIVER)
+      .option("url", MYSQL_URL)
+      .option("dbtable", tableName)
+      .option("user", "root")
+      .option("password", "asdfg12345")
+      .mode("append")
+      .save()
+  }
+
+
+}
